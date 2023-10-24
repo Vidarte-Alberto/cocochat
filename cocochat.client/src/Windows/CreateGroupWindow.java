@@ -6,14 +6,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ChatWindow extends JFrame {
-    private JLabel label1 = new JLabel("Esperando mensaje...");
-    private JTextField textField1 = new JTextField(50);
-    private JButton sendButton = new JButton("Mandar");
+public class CreateGroupWindow extends JFrame {
+    private JLabel groupNameLabel = new JLabel("Nombre del grupo:");
+    private JTextField groupNameField = new JTextField(20);
+    private JLabel usersLabel = new JLabel("Usuarios del grupo:");
+    private JTextArea usersTextArea = new JTextArea(5, 20);
+    private JButton createGroupButton = new JButton("Crear Grupo");
     private JButton closeButton = new JButton("Cerrar");
 
-    public ChatWindow() {
-        super("Chat");
+    public CreateGroupWindow() {
+        super("Crear Grupo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -23,24 +25,32 @@ public class ChatWindow extends JFrame {
         layout.setAutoCreateContainerGaps(true);
 
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-        hGroup.addGroup(layout.createParallelGroup(Alignment.LEADING)
-                .addComponent(label1)
-                .addComponent(textField1)
-                .addComponent(sendButton)
-        );
         hGroup.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+                .addComponent(groupNameLabel)
+                .addComponent(usersLabel)
+        );
+        hGroup.addGroup(layout.createParallelGroup()
+                .addComponent(groupNameField)
+                .addComponent(usersTextArea)
+        );
+        hGroup.addGroup(layout.createParallelGroup()
+                .addComponent(createGroupButton)
                 .addComponent(closeButton)
         );
         layout.setHorizontalGroup(hGroup);
 
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-        vGroup.addComponent(label1);
+        vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                .addComponent(groupNameLabel)
+                .addComponent(groupNameField)
+                .addComponent(createGroupButton)
+        );
         vGroup.addPreferredGap(ComponentPlacement.UNRELATED);
-        vGroup.addComponent(textField1);
-        vGroup.addPreferredGap(ComponentPlacement.UNRELATED);
-        vGroup.addComponent(sendButton);
-        vGroup.addPreferredGap(ComponentPlacement.UNRELATED);
-        vGroup.addComponent(closeButton);
+        vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                .addComponent(usersLabel)
+                .addComponent(usersTextArea)
+                .addComponent(closeButton)
+        );
         layout.setVerticalGroup(vGroup);
 
         // Agregamos un manejador de eventos al botón "Cerrar"
@@ -51,14 +61,13 @@ public class ChatWindow extends JFrame {
             }
         });
 
-
         pack();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ChatWindow chatWindow = new ChatWindow();
-            chatWindow.setVisible(true);
+            CreateGroupWindow createGroupWindow = new CreateGroupWindow();
+            createGroupWindow.setVisible(true);
         });
     }
 }
