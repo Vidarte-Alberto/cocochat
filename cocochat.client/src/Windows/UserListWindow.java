@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
+
+import Models.User;
 
 public class UserListWindow extends JFrame {
     private JList<User> connectedUsersList;
@@ -23,8 +27,8 @@ public class UserListWindow extends JFrame {
         disconnectedUsersList = new JList<>(disconnectedUsersModel);
 
         // Agregar algunos usuarios de ejemplo
-        connectedUsersModel.addElement(new User("Usuario 1"));
-        connectedUsersModel.addElement(new User("Usuario 2"));
+        connectedUsersModel.addElement(new User("User 1","123",true, Timestamp.from(ZonedDateTime.now().toInstant()),1));
+        connectedUsersModel.addElement(new User("User 2","123",true, Timestamp.from(ZonedDateTime.now().toInstant()),1));
         disconnectedUsersModel.addElement("Usuario 3");
         disconnectedUsersModel.addElement("Usuario 4");
 
@@ -75,17 +79,6 @@ public class UserListWindow extends JFrame {
 
 
     // Clase para representar un usuario
-    class User {
-        private String name;
-
-        public User(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
 
     // Clase para personalizar la apariencia de las celdas de la lista de usuarios conectados
     class UserCellRenderer extends JPanel implements ListCellRenderer<User> {
