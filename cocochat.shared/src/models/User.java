@@ -36,6 +36,19 @@ public class User implements Serializable {
         this.countRegisterFailed = countRegisterFailed;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "idUser=" + idUser +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", connected=" + connected +
+                ", dateFailedRegister=" + dateFailedRegister +
+                ", countRegisterFailed=" + countRegisterFailed +
+                '}';
+    }
+
+
     public User(String name, String password){
         this.name = name;
         this.password = password;

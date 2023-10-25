@@ -8,6 +8,13 @@ public class Chat implements Serializable {
     public Chat(int idChat) {
         this.idChat = idChat;
     }
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "idChat=" + idChat +
+                '}';
+    }
+
 
     public int getIdChat() {
         return idChat;
