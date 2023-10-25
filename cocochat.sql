@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 23-10-2023 a las 00:34:17
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Host: localhost
+-- Generation Time: Oct 25, 2023 at 05:11 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `cocochat`
+-- Database: `cocochat`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Amistad`
+-- Table structure for table `Amistad`
 --
 
 CREATE TABLE `Amistad` (
@@ -37,7 +37,7 @@ CREATE TABLE `Amistad` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Chats`
+-- Table structure for table `Chats`
 --
 
 CREATE TABLE `Chats` (
@@ -47,7 +47,7 @@ CREATE TABLE `Chats` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Grupo`
+-- Table structure for table `Grupo`
 --
 
 CREATE TABLE `Grupo` (
@@ -59,7 +59,7 @@ CREATE TABLE `Grupo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Grupo_usuarios`
+-- Table structure for table `Grupo_usuarios`
 --
 
 CREATE TABLE `Grupo_usuarios` (
@@ -71,7 +71,7 @@ CREATE TABLE `Grupo_usuarios` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Mensaje`
+-- Table structure for table `Mensaje`
 --
 
 CREATE TABLE `Mensaje` (
@@ -85,7 +85,7 @@ CREATE TABLE `Mensaje` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Usuarios`
+-- Table structure for table `Usuarios`
 --
 
 CREATE TABLE `Usuarios` (
@@ -98,32 +98,33 @@ CREATE TABLE `Usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `Amistad`
+-- Indexes for table `Amistad`
 --
 ALTER TABLE `Amistad`
   ADD PRIMARY KEY (`id_amistad`),
   ADD KEY `Relacion U_Destino` (`usuario_destino`),
-  ADD KEY `Relacion U_Origen` (`usuario_origen`);
+  ADD KEY `Relacion U_Origen` (`usuario_origen`),
+  ADD KEY `Relacion Id_Chat` (`id_chat`);
 
 --
--- Indices de la tabla `Chats`
+-- Indexes for table `Chats`
 --
 ALTER TABLE `Chats`
   ADD PRIMARY KEY (`id_chat`);
 
 --
--- Indices de la tabla `Grupo`
+-- Indexes for table `Grupo`
 --
 ALTER TABLE `Grupo`
   ADD PRIMARY KEY (`id_grupo`),
   ADD KEY `id_chat` (`id_chat`);
 
 --
--- Indices de la tabla `Grupo_usuarios`
+-- Indexes for table `Grupo_usuarios`
 --
 ALTER TABLE `Grupo_usuarios`
   ADD PRIMARY KEY (`id_grupo_usuarios`),
@@ -131,7 +132,7 @@ ALTER TABLE `Grupo_usuarios`
   ADD KEY `grupo_usuarios_ibfk_2` (`id_usuario`);
 
 --
--- Indices de la tabla `Mensaje`
+-- Indexes for table `Mensaje`
 --
 ALTER TABLE `Mensaje`
   ADD PRIMARY KEY (`id_mensaje`),
@@ -139,77 +140,78 @@ ALTER TABLE `Mensaje`
   ADD KEY `id_chat` (`id_chat`);
 
 --
--- Indices de la tabla `Usuarios`
+-- Indexes for table `Usuarios`
 --
 ALTER TABLE `Usuarios`
   ADD PRIMARY KEY (`id_usuario`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `Amistad`
+-- AUTO_INCREMENT for table `Amistad`
 --
 ALTER TABLE `Amistad`
   MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `Chats`
+-- AUTO_INCREMENT for table `Chats`
 --
 ALTER TABLE `Chats`
   MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `Grupo`
+-- AUTO_INCREMENT for table `Grupo`
 --
 ALTER TABLE `Grupo`
   MODIFY `id_grupo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `Grupo_usuarios`
+-- AUTO_INCREMENT for table `Grupo_usuarios`
 --
 ALTER TABLE `Grupo_usuarios`
   MODIFY `id_grupo_usuarios` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `Mensaje`
+-- AUTO_INCREMENT for table `Mensaje`
 --
 ALTER TABLE `Mensaje`
   MODIFY `id_mensaje` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `Usuarios`
+-- AUTO_INCREMENT for table `Usuarios`
 --
 ALTER TABLE `Usuarios`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `Amistad`
+-- Constraints for table `Amistad`
 --
 ALTER TABLE `Amistad`
+  ADD CONSTRAINT `Relacion Id_Chat` FOREIGN KEY (`id_chat`) REFERENCES `Chats` (`id_chat`),
   ADD CONSTRAINT `Relacion U_Destino` FOREIGN KEY (`usuario_destino`) REFERENCES `Usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Relacion U_Origen` FOREIGN KEY (`usuario_origen`) REFERENCES `Usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Grupo`
+-- Constraints for table `Grupo`
 --
 ALTER TABLE `Grupo`
   ADD CONSTRAINT `grupo_ibfk_1` FOREIGN KEY (`id_chat`) REFERENCES `Chats` (`id_chat`);
 
 --
--- Filtros para la tabla `Grupo_usuarios`
+-- Constraints for table `Grupo_usuarios`
 --
 ALTER TABLE `Grupo_usuarios`
   ADD CONSTRAINT `grupo_usuarios_ibfk_1` FOREIGN KEY (`id_grupo`) REFERENCES `Grupo` (`id_grupo`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `grupo_usuarios_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `Usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Mensaje`
+-- Constraints for table `Mensaje`
 --
 ALTER TABLE `Mensaje`
   ADD CONSTRAINT `mensaje_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `Usuarios` (`id_usuario`),
