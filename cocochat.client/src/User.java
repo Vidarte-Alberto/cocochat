@@ -1,5 +1,3 @@
-package models;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -39,6 +37,9 @@ public class User implements Serializable {
     public User(String name, String password){
         this.name = name;
         this.password = password;
+        this.connected = false;
+        this.dateFailedRegister = null;
+        this.countRegisterFailed = 0;
     }
 
     public int getIdUser() {

@@ -5,13 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import connections.DatabaseConnection;
 import models.Group;
 
 public class GroupDao {
     private final Connection connection;
 
-    public GroupDao(Connection connection) {
-        this.connection = connection;
+    public GroupDao() {
+        // Obtener la conexión a la base de datos a través de la clase DatabaseConnection
+        this.connection = DatabaseConnection.getConnection();
     }
 
     public boolean createGroup(Group group) {

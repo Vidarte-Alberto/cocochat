@@ -1,8 +1,7 @@
 package dao;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +23,9 @@ public class UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setBoolean(3, user.isConnected());
-            preparedStatement.setTimestamp(4, user.getDateFailedRegister());
-            preparedStatement.setInt(5, user.getCountRegisterFailed());
+            preparedStatement.setBoolean(3, false);
+            preparedStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setInt(5, 0);
 
             int rowsAffected = preparedStatement.executeUpdate();
             return rowsAffected > 0;
@@ -90,6 +89,34 @@ public class UserDao {
         }
     }
 
+    public User loginUser(String name, String pass) {
+        String query = "SELECT * FROM Usuarios WHERE nombre = ? AND contra = ? LIMIT 1";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, pass);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.getRow() == 0){
+                return null;
+            }
+            var user = mapResultSetToUser(resultSet);
+
+            query = "UPDATE Usuarios SET conectado = 1 WHERE id_usuario = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, user.getIdUser());
+            resultSet = preparedStatement.executeQuery();
+            if (!resultSet.rowUpdated()) {
+                throw new SQLException("Error updating connection status ");
+            }
+
+            return user;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public boolean deleteUser(int id) {
         String query = "DELETE FROM Usuarios WHERE id_usuario = ?";
 
@@ -114,4 +141,4 @@ public class UserDao {
                 resultSet.getInt("registros_fallidos")
         );
     }
-}
+ }
