@@ -47,8 +47,10 @@ public class ServerThread extends Thread{
                     case "login":
                         user = (User)in.readObject();
                         System.out.println(user.getName() + " " + user.getPassword());
-                        if (userDao.loginUser(user.getName(), user.getPassword())) {
+                        user = userDao.loginUser(user.getName(), user.getPassword());
+                        if ( user != null) {
                             out.writeUTF("1");
+                            out.writeObject(user);
                         } else {
                             out.writeUTF("0");
                         }
@@ -72,7 +74,44 @@ public class ServerThread extends Thread{
                         break;
                     case "getAllUser":
                         userList = userDao.getAllUsers();
-                        out.writeObject(userList);
+                        if (userList != null)
+                        {
+                            out.writeObject(userList);
+                            out.flush();
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("1");
+                        }
+                        break;
+                    case "getAllUserConnected":
+                        userList = userDao.getAllUsersConnected();
+                        if (userList != null)
+                        {
+                            out.writeObject(userList);
+                            out.flush();
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("1");
+                        }
+                        break;
+                    case "getAllUserDisconnected":
+                        userList = userDao.getAllUsersDisconnected();
+                        if (userList != null)
+                        {
+                            out.writeObject(userList);
+                            out.flush();
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("1");
+                        }
+                        break;
+                    case "signOut":
+                        if (userDao.updateUser((User) in.readObject()))
+                        {
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("1");
+                        }
                         break;
                     case "createGroup":
                         group = (Group)in.readObject();

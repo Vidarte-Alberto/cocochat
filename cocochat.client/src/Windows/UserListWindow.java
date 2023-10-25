@@ -1,13 +1,11 @@
 package Windows;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 import Session.Session;
 import models.User;
 
@@ -16,6 +14,7 @@ public class UserListWindow extends JFrame {
     private JList<String> disconnectedUsersList;
     private DefaultListModel<User> connectedUsersModel;
     private DefaultListModel<String> disconnectedUsersModel;
+    private List<User> model;
     private MainWindow mainWindow; // Referencia a la ventana principal
 
     public UserListWindow() { // Agrega un parámetro al constructor
@@ -28,12 +27,6 @@ public class UserListWindow extends JFrame {
         disconnectedUsersModel = new DefaultListModel<>();
         connectedUsersList = new JList<>(connectedUsersModel);
         disconnectedUsersList = new JList<>(disconnectedUsersModel);
-
-        // Agregar algunos usuarios de ejemplo
-        connectedUsersModel.addElement(new User("User 1","123",true, Timestamp.from(ZonedDateTime.now().toInstant()),1));
-        connectedUsersModel.addElement(new User("User 2","123",true, Timestamp.from(ZonedDateTime.now().toInstant()),1));
-        disconnectedUsersModel.addElement("Usuario 3");
-        disconnectedUsersModel.addElement("Usuario 4");
 
         JLabel connectedLabel = new JLabel("Usuarios Conectados");
         JLabel disconnectedLabel = new JLabel("Usuarios Desconectados");
@@ -69,11 +62,78 @@ public class UserListWindow extends JFrame {
         // Agregar un botón para enviar solicitud de amistad junto a cada usuario conectado
         connectedUsersList.setCellRenderer(new UserCellRenderer());
 
+        // Cargar la lista de usuarios conectados
+        loadConnectedUsers();
+        loadDisconnectedUsers();
+
         pack();
     }
 
+    private void loadConnectedUsers() {
+        List<User> users = listUsersConnected();
+        if (users != null) {
+            connectedUsersModel.clear(); // Limpia el modelo actual
+            for (User user : users) {
+                connectedUsersModel.addElement(user);
+            }
+        }
+    }
 
-    // Clase para representar un usuario
+    private void loadDisconnectedUsers() {
+        List<User> users = listUsersConnected();
+        if (users != null) {
+            connectedUsersModel.clear(); // Limpia el modelo actual
+            for (User user : users) {
+                connectedUsersModel.addElement(user);
+            }
+        }
+    }
+
+    private List<User> listUsersDisconnected() {
+        var socket = Session.getSocket();
+        try {
+            var out = Session.getOut(socket);
+            var in = Session.getIn(socket);
+            out.writeUTF("getAllUserDisconnected");
+            out.flush();
+            List<User> user = (ArrayList<User>) in.readObject();
+            out.flush();
+
+            String response = in.readUTF();
+            if (response.equals("1")) {
+                JOptionPane.showMessageDialog(this, "Usuarios Cargados");
+                return user;
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuarios no cargados");
+                return null;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<User> listUsersConnected() {
+        var socket = Session.getSocket();
+        try {
+            var out = Session.getOut(socket);
+            var in = Session.getIn(socket);
+            out.writeUTF("getAllUserConnected");
+            out.flush();
+            List<User> user = (ArrayList<User>) in.readObject();
+            out.flush();
+
+            String response = in.readUTF();
+            if (response.equals("1")) {
+                JOptionPane.showMessageDialog(this, "Usuarios Cargados");
+                return user;
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuarios no cargados");
+                return null;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // Clase para personalizar la apariencia de las celdas de la lista de usuarios conectados
     class UserCellRenderer extends JPanel implements ListCellRenderer<User> {
@@ -105,5 +165,4 @@ public class UserListWindow extends JFrame {
             return this;
         }
     }
-
 }

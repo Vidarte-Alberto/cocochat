@@ -67,7 +67,40 @@ public class UserDao {
         return users;
     }
 
+    public List<User> getAllUsersConnected() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM Usuarios WHERE conectado = 1";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(mapResultSetToUser(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return users;
+    }
+
+    public List<User> getAllUsersDisconnected() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM Usuarios WHERE conectado = 0";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(mapResultSetToUser(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return users;
+    }
+
     public boolean updateUser(User user) {
+        System.out.println(user.toString());
         String query = "UPDATE Usuarios SET nombre = ?, contra = ?, conectado = ?, fecha_registro_fallido = ?, registros_fallidos = ? " +
                 "WHERE id_usuario = ?";
 
@@ -87,7 +120,7 @@ public class UserDao {
         }
     }
 
-    public boolean loginUser(String name, String pass) {
+    public User loginUser(String name, String pass) {
         String query = "SELECT * FROM Usuarios WHERE nombre = ? AND contra = ? LIMIT 1";
 
         try {
@@ -96,25 +129,37 @@ public class UserDao {
             preparedStatement.setString(2, pass);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (!resultSet.next()) {
-                return false;
+            User user = null; // Inicialmente, no se ha encontrado ningún usuario
+
+            if (resultSet.next()) {
+                user = new User();
+                user.setIdUser(resultSet.getInt("id_usuario"));
+                user.setName(resultSet.getString("nombre"));
+                user.setPassword(resultSet.getString("contra"));
+                user.setConnected(resultSet.getBoolean("conectado"));
+                user.setDateFailedRegister(resultSet.getTimestamp("fecha_registro_fallido"));
+                user.setCountRegisterFailed(resultSet.getInt("registros_fallidos"));
             }
 
-            String updateQuery = "UPDATE Usuarios SET conectado = 1 WHERE nombre = ?";
-            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-            updateStatement.setString(1, name);
-            int rowsUpdated = updateStatement.executeUpdate();
+            if (user != null) {
+                String updateQuery = "UPDATE Usuarios SET conectado = 1 WHERE nombre = ?";
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+                updateStatement.setString(1, name);
+                int rowsUpdated = updateStatement.executeUpdate();
 
-            if (rowsUpdated == 0) {
-                throw new SQLException("Error updating connection status");
+                if (rowsUpdated == 0) {
+                    throw new SQLException("Error updating connection status");
+                }
             }
 
-            return true;
+            return user;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return false;
+            return null; // Devuelve null en caso de error o si no se encuentra un usuario
         }
     }
+
+
 
     public boolean deleteUser(int id) {
         String query = "DELETE FROM Usuarios WHERE id_usuario = ?";

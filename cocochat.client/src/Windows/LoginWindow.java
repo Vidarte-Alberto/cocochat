@@ -85,7 +85,6 @@ public class LoginWindow extends JFrame {
             out.writeUTF("register");
             out.flush();
             out.writeObject(user);
-            out.flush();
 
             String response = in.readUTF();
             if (response.equals("1")) {
@@ -102,9 +101,6 @@ public class LoginWindow extends JFrame {
         // y esperar la respuesta del servidor
 
         // Si el inicio de sesión fue exitoso, puedes abrir la ventana MainWindow
-        MainWindow mainWindow = new MainWindow();
-        mainWindow.setVisible(true);
-
         // Cerrar la ventana actual (LoginWindow)
         dispose();
     }
@@ -130,15 +126,20 @@ public class LoginWindow extends JFrame {
             out.flush();
             out.writeObject(user);
             out.flush();
-
             String response = in.readUTF();
             if (response.equals("1")) {
                 JOptionPane.showMessageDialog(this, "Ingreso exitoso");
+                user = (User)in.readObject();
+                MainWindow mainWindow = new MainWindow(user);
+                mainWindow.setVisible(true);
+
             } else {
                 JOptionPane.showMessageDialog(this, "Ingreso fallido");
                 return;
             }
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
             if ( out != null) {
@@ -156,10 +157,6 @@ public class LoginWindow extends JFrame {
                 }
             }
         }
-
-        MainWindow mainWindow = new MainWindow();
-        mainWindow.setVisible(true);
-
         dispose();
     }
 }
