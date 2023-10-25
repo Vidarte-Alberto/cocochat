@@ -1,4 +1,4 @@
-import Windows.ChatWindow;
+import Windows.MainWindow;
 
 import javax.swing.*;
 
@@ -7,8 +7,8 @@ public class Main {
         System.out.println("Hello world!");
 
         SwingUtilities.invokeLater(() -> {
-            ChatWindow chatWindow = new ChatWindow();
-            chatWindow.setVisible(true);
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.setVisible(true);
         });
     }
 }
