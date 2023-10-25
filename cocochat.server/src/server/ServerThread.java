@@ -47,10 +47,9 @@ public class ServerThread extends Thread{
                     case "login":
                         user = (User)in.readObject();
                         System.out.println(user.getName() + " " + user.getPassword());
-                        user = userDao.loginUser(user.getName(), user.getPassword());
-                        if(user != null) {
+                        if (userDao.loginUser(user.getName(), user.getPassword())) {
                             out.writeUTF("1");
-                        }else {
+                        } else {
                             out.writeUTF("0");
                         }
                         break;
