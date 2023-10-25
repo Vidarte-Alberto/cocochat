@@ -87,7 +87,7 @@ public class UserDao {
         }
     }
 
-    public User loginUser(String name, String pass) {
+    public boolean loginUser(String name, String pass) {
         String query = "SELECT * FROM Usuarios WHERE nombre = ? AND contra = ? LIMIT 1";
 
         try {
@@ -95,23 +95,23 @@ public class UserDao {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, pass);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.getRow() == 0){
-                return null;
-            }
-            var user = mapResultSetToUser(resultSet);
 
-            query = "UPDATE Usuarios SET conectado = 1 WHERE id_usuario = ?";
+            if (!resultSet.next()) {
+                return false;
+            }
+
+            query = "UPDATE Usuarios SET conectado = 1 WHERE nombre = ?";
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, user.getIdUser());
+            preparedStatement.setString(1, name);
             resultSet = preparedStatement.executeQuery();
             if (!resultSet.rowUpdated()) {
                 throw new SQLException("Error updating connection status ");
             }
 
-            return user;
+            return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return null;
+            return false;
         }
     }
 

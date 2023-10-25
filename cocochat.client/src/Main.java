@@ -1,12 +1,12 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 
-import Windows.MainWindow;
-import models.*;
+import Session.Session;
+import Windows.LoginWindow;
 
 public class Main {
     public static void main(String[] args) {
-        new MainWindow();
+        var loginWidow = new LoginWindow();
+        loginWidow.setVisible(true);
     }
 }

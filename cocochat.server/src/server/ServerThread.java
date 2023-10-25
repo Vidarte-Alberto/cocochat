@@ -37,8 +37,6 @@ public class ServerThread extends Thread{
                 opc = in.readUTF();
                 switch(opc) {
                     case "register":
-                        out.writeUTF("OK");
-                        out.flush();
                         user = (User) in.readObject();
                         if(userDao.createUser(user)) {
                             out.writeUTF("1");
@@ -48,10 +46,10 @@ public class ServerThread extends Thread{
                         break;
                     case "login":
                         user = (User)in.readObject();
-                        user = userDao.loginUser(user.getName(), user.getPassword());
-                        if(user != null) {
+                        System.out.println(user.getName() + " " + user.getPassword());
+                        if (userDao.loginUser(user.getName(), user.getPassword())) {
                             out.writeUTF("1");
-                        }else {
+                        } else {
                             out.writeUTF("0");
                         }
                         break;
