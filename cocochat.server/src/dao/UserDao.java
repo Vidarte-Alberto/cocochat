@@ -95,10 +95,14 @@ public class UserDao {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, pass);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.getRow() == 0){
-                return null;
+
+            User user = null;
+            while (resultSet.next()) {
+                user = mapResultSetToUser(resultSet);
             }
-            var user = mapResultSetToUser(resultSet);
+
+            if (user == null)
+                return null;
 
             query = "UPDATE Usuarios SET conectado = 1 WHERE id_usuario = ?";
             preparedStatement = connection.prepareStatement(query);

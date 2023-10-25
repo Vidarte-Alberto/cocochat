@@ -14,18 +14,14 @@ public class Main {
 
             System.out.println("Servidor iniciado");
             while (true) {
-
                 sc = server.accept();
                 System.out.println("Nueva conexion aceptada");
 
                 ObjectInputStream in = new ObjectInputStream(sc.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(sc.getOutputStream());
 
-
                 ServerThread thread = new ServerThread(in, out, sc);
                 thread.start();
-
-
             }
         } catch (IOException e) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
