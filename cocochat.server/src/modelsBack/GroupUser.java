@@ -1,6 +1,8 @@
-package models;
+package modelsBack;
 
-public class GroupUser {
+import java.io.Serializable;
+
+public class GroupUser implements Serializable {
     private int idGroupUser;
     private int idGroup;
     private int idUser;

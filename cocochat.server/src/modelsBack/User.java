@@ -1,8 +1,9 @@
-package models;
+package modelsBack;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class User {
+public class User implements Serializable {
     private int idUser;
     private String name;
     private String password;
@@ -33,6 +34,11 @@ public class User {
         this.connected = connected;
         this.dateFailedRegister = dateFailedRegister;
         this.countRegisterFailed = countRegisterFailed;
+    }
+
+    public User(String name, String password){
+        this.name = name;
+        this.password = password;
     }
 
     public int getIdUser() {
