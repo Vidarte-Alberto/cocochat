@@ -105,6 +105,14 @@ public class ServerThread extends Thread{
                             out.writeUTF("1");
                         }
                         break;
+                    case "updateUser":
+                        if (userDao.updateUser((User) in.readObject()))
+                        {
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("1");
+                        }
+                        break;
                     case "signOut":
                         if (userDao.updateUser((User) in.readObject()))
                         {
