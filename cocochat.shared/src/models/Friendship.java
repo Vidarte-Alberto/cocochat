@@ -31,6 +31,17 @@ public class Friendship implements Serializable {
         this.idChat = idChat;
     }
 
+    @Override
+    public String toString() {
+        return "Friendship{" +
+                "idFriendship=" + idFriendship +
+                ", userOrigin=" + userOrigin +
+                ", userDestiny=" + userDestiny +
+                ", idChat=" + idChat +
+                '}';
+    }
+
+
     public int getIdFriendship() {
         return idFriendship;
     }

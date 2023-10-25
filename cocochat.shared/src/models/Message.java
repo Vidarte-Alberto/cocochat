@@ -32,6 +32,18 @@ public class Message implements Serializable {
         this.message = message;
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "idMessage=" + idMessage +
+                ", idChat=" + idChat +
+                ", idUser=" + idUser +
+                ", dateMessage=" + dateMessage +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
+
     public int getIdMessage() {
         return idMessage;
     }

@@ -23,6 +23,16 @@ public class GroupUser implements Serializable {
         this.idUser = idUser;
     }
 
+    @Override
+    public String toString() {
+        return "GroupUser{" +
+                "idGroupUser=" + idGroupUser +
+                ", idGroup=" + idGroup +
+                ", idUser=" + idUser +
+                '}';
+    }
+
+
     public int getIdGroupUser() {
         return idGroupUser;
     }

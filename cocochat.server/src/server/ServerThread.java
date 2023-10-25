@@ -78,7 +78,13 @@ public class ServerThread extends Thread{
                         break;
                     case "createGroup":
                         group = (Group)in.readObject();
+
                         break;
+                    case "exit":
+                        out.writeUTF("exit");
+                        out.flush();
+                        closeConnection();
+                        return;
                     default:
                         out.writeUTF("Solo puedes seleccionar 1 o 2");
                         break;
@@ -91,4 +97,22 @@ public class ServerThread extends Thread{
         }
 
     }
+
+    private void closeConnection() {
+        try {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+            if (sc != null) {
+                sc.close();
+            }
+        } catch (IOException e) {
+            // Maneja la excepción de cierre de conexión si es necesario
+            Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
 }
