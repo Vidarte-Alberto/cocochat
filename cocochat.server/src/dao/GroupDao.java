@@ -8,6 +8,7 @@ import java.util.List;
 
 import connections.DatabaseConnection;
 import models.Group;
+import org.mariadb.jdbc.Statement;
 
 public class GroupDao {
     private final Connection connection;
@@ -17,7 +18,7 @@ public class GroupDao {
         this.connection = DatabaseConnection.getConnection();
     }
 
-    public boolean createGroup(Group group) {
+    /*public boolean createGroup(Group group) {
         String query = "INSERT INTO Grupo (id_chat, nombre) " +
                 "VALUES (?, ?)";
 
@@ -31,7 +32,38 @@ public class GroupDao {
             System.out.println(e.getMessage());
             return false;
         }
+    }*/
+
+    public boolean createGroup(Group group) {
+        try {
+            // Paso 1: Crear un nuevo chat y obtener su ID
+            String chatInsertQuery = "INSERT INTO Chats () VALUES ()";
+            PreparedStatement chatInsertStatement = connection.prepareStatement(chatInsertQuery, Statement.RETURN_GENERATED_KEYS);
+            chatInsertStatement.executeUpdate();
+
+            ResultSet generatedKeys = chatInsertStatement.getGeneratedKeys();
+            int chatId = -1;
+            if (generatedKeys.next()) {
+                chatId = generatedKeys.getInt(1);
+            } else {
+                // No se generó un ID de chat, manejar el error como sea necesario.
+                return false;
+            }
+
+            // Paso 2: Insertar el grupo con el ID del chat
+            String groupInsertQuery = "INSERT INTO Grupo (id_chat, nombre) VALUES (?, ?)";
+            PreparedStatement groupInsertStatement = connection.prepareStatement(groupInsertQuery);
+            groupInsertStatement.setInt(1, chatId);
+            groupInsertStatement.setString(2, group.getNameGroup());
+
+            int rowsAffected = groupInsertStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
+
 
     public Group getGroupById(int id) {
         String query = "SELECT * FROM Grupo WHERE id_grupo = ?";

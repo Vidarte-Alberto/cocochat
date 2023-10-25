@@ -23,6 +23,12 @@ public class Group implements Serializable {
         this.nameGroup = nameGroup;
     }
 
+    public Group(String nameGroup) {
+        this.idGroup = idGroup;
+        this.idChat = idChat;
+        this.nameGroup = nameGroup;
+    }
+
     @Override
     public String toString() {
         return "Group{" +

@@ -97,11 +97,6 @@ public class LoginWindow extends JFrame {
             throw new RuntimeException(e);
         }
 
-        // Aquí puedes enviar el mensaje de inicio de sesión al servidor
-        // y esperar la respuesta del servidor
-
-        // Si el inicio de sesión fue exitoso, puedes abrir la ventana MainWindow
-        // Cerrar la ventana actual (LoginWindow)
         dispose();
     }
 

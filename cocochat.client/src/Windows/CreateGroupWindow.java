@@ -1,8 +1,13 @@
 package Windows;
+import Session.Session;
+import models.Group;
+import models.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.border.EmptyBorder;
 
 public class CreateGroupWindow extends JFrame {
@@ -36,9 +41,7 @@ public class CreateGroupWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String groupName = groupNameField.getText();
                 String description = descriptionArea.getText();
-                // Aquí puedes implementar la lógica para crear el grupo con el nombre y la descripción proporcionados
-                // Por ahora, simplemente mostramos un mensaje
-                JOptionPane.showMessageDialog(null, "Grupo creado: " + groupName);
+                createGroup(groupName,description);
                 dispose(); // Cierra la ventana
             }
         });
@@ -47,6 +50,37 @@ public class CreateGroupWindow extends JFrame {
         getContentPane().add(mainPanel);
         pack();
         setVisible(true);
+    }
+
+    private void createGroup(String name, String description) {
+
+        if (name.isEmpty() || description.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario y la contraseña no pueden estar vacíos");
+            return;
+        }
+
+        var socket = Session.getSocket();
+        try {
+            var out = Session.getOut(socket);
+            var in = Session.getIn(socket);
+
+            var group = new Group(name);
+            out.writeUTF("createGroup");
+            out.flush();
+            out.writeObject(group);
+
+            String response = in.readUTF();
+            if (response.equals("1")) {
+                JOptionPane.showMessageDialog(this, "Grupo creado: " + name);
+            } else {
+                JOptionPane.showMessageDialog(this, "Grupo fallido");
+                return;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        dispose();
     }
 
     private JButton createMaterialButton(String text, Color color) {

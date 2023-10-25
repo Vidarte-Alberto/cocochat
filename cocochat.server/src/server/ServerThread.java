@@ -114,8 +114,12 @@ public class ServerThread extends Thread{
                         }
                         break;
                     case "createGroup":
-                        group = (Group)in.readObject();
-
+                        if (groupDao.createGroup((Group) in.readObject()))
+                        {
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("0");
+                        }
                         break;
                     case "exit":
                         out.writeUTF("exit");
