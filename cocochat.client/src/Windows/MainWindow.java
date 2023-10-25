@@ -48,6 +48,7 @@ public class MainWindow extends JFrame {
         userListButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Implementa la lógica para abrir la ventana de lista de usuarios
+                new UserListWindow();
             }
         });
 

@@ -4,10 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
-import Models.User;
+import Session.Session;
+import models.User;
 
 public class UserListWindow extends JFrame {
     private JList<User> connectedUsersList;
@@ -18,6 +20,7 @@ public class UserListWindow extends JFrame {
 
     public UserListWindow() { // Agrega un parámetro al constructor
         super("Lista de Usuarios");
+        setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.mainWindow = mainWindow;
 
@@ -69,14 +72,6 @@ public class UserListWindow extends JFrame {
         pack();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainWindow mainWindow = new MainWindow();
-            UserListWindow userListWindow = new UserListWindow(); // Pasa la referencia a MainWindow
-            userListWindow.setVisible(true);
-        });
-    }
-
 
     // Clase para representar un usuario
 
@@ -110,4 +105,5 @@ public class UserListWindow extends JFrame {
             return this;
         }
     }
+
 }

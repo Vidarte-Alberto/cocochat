@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import Session.Session;
-import models.User;
+import models.*;
 
 import java.io.*;
 

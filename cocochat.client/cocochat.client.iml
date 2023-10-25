@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="cocochat.shared" />
     <orderEntry type="library" name="github.lgooddatepicker.LGoodDatePicker" level="project" />
+    <orderEntry type="module" module-name="cocochat.shared" />
   </component>
 </module>

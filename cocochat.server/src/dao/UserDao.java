@@ -100,12 +100,13 @@ public class UserDao {
                 return false;
             }
 
-            query = "UPDATE Usuarios SET conectado = 1 WHERE nombre = ?";
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, name);
-            resultSet = preparedStatement.executeQuery();
-            if (!resultSet.rowUpdated()) {
-                throw new SQLException("Error updating connection status ");
+            String updateQuery = "UPDATE Usuarios SET conectado = 1 WHERE nombre = ?";
+            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+            updateStatement.setString(1, name);
+            int rowsUpdated = updateStatement.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                throw new SQLException("Error updating connection status");
             }
 
             return true;
