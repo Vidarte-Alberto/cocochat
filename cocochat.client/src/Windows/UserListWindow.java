@@ -11,9 +11,9 @@ import models.User;
 
 public class UserListWindow extends JFrame {
     private JList<User> connectedUsersList;
-    private JList<String> disconnectedUsersList;
+    private JList<User> disconnectedUsersList;
     private DefaultListModel<User> connectedUsersModel;
-    private DefaultListModel<String> disconnectedUsersModel;
+    private DefaultListModel<User> disconnectedUsersModel;
     private List<User> model;
     private MainWindow mainWindow; // Referencia a la ventana principal
 
@@ -61,6 +61,7 @@ public class UserListWindow extends JFrame {
 
         // Agregar un botón para enviar solicitud de amistad junto a cada usuario conectado
         connectedUsersList.setCellRenderer(new UserCellRenderer());
+        disconnectedUsersList.setCellRenderer(new UserCellRenderer());
 
         // Cargar la lista de usuarios conectados
         loadConnectedUsers();
@@ -80,11 +81,11 @@ public class UserListWindow extends JFrame {
     }
 
     private void loadDisconnectedUsers() {
-        List<User> users = listUsersConnected();
+        List<User> users = listUsersDisconnected();
         if (users != null) {
-            connectedUsersModel.clear(); // Limpia el modelo actual
+            disconnectedUsersModel.clear(); // Limpia el modelo actual
             for (User user : users) {
-                connectedUsersModel.addElement(user);
+                disconnectedUsersModel.addElement(user);
             }
         }
     }
@@ -144,7 +145,7 @@ public class UserListWindow extends JFrame {
             setLayout(new BorderLayout());
 
             nameLabel = new JLabel();
-            addButton = new JButton("Enviar solicitud");
+            addButton = new JButton("Agregar");
             addButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
