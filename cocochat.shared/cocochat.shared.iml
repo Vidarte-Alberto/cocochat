@@ -7,8 +7,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="cocochat.shared" exported="" />
-    <orderEntry type="library" exported="" name="mariadb.jdbc.java.client" level="project" />
-    <orderEntry type="library" exported="" name="ch.qos.logback.classic" level="project" />
   </component>
 </module>

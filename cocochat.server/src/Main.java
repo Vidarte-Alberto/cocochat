@@ -18,8 +18,8 @@ public class Main {
                 sc = server.accept();
                 System.out.println("Nueva conexion aceptada");
 
-                DataInputStream in = new DataInputStream(sc.getInputStream());
-                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(sc.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(sc.getOutputStream());
 
 
                 ServerThread thread = new ServerThread(in, out, sc);
