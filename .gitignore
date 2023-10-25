@@ -1,3 +1,4 @@
+*.class
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -7,6 +8,8 @@ target/
 .idea/
 *.iws
 *.ipr
+*.sql
+*.md
 
 ### Eclipse ###
 .apt_generated
