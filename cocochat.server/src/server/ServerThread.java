@@ -80,7 +80,7 @@ public class ServerThread extends Thread{
                             out.flush();
                             out.writeUTF("1");
                         }else {
-                            out.writeUTF("1");
+                            out.writeUTF("0");
                         }
                         break;
                     case "getAllUserConnected":
@@ -91,7 +91,7 @@ public class ServerThread extends Thread{
                             out.flush();
                             out.writeUTF("1");
                         }else {
-                            out.writeUTF("1");
+                            out.writeUTF("0");
                         }
                         break;
                     case "getAllUserDisconnected":
@@ -102,7 +102,7 @@ public class ServerThread extends Thread{
                             out.flush();
                             out.writeUTF("1");
                         }else {
-                            out.writeUTF("1");
+                            out.writeUTF("0");
                         }
                         break;
                     case "updateUser", "signOut":
