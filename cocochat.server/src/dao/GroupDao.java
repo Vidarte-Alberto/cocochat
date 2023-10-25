@@ -12,10 +12,7 @@ import models.Group;
 public class GroupDao {
     private final Connection connection;
 
-    public GroupDao() {
-        // Obtener la conexión a la base de datos a través de la clase DatabaseConnection
-        this.connection = DatabaseConnection.getConnection();
-    }
+    public GroupDao(Connection connection) {this.connection = connection;}
 
     public boolean createGroup(Group group) {
         String query = "INSERT INTO Grupo (id_chat, nombre) " +

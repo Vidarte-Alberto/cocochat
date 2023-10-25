@@ -30,7 +30,7 @@ public class GroupUserDao {
         }
     }
 
-    public List<GroupUser> getGroupUsersByGroup(int idGroup) {
+    public List<GroupUser> getGroupUsersById(int idGroup) {
         List<GroupUser> groupUsers = new ArrayList<>();
         String query = "SELECT * FROM Grupo_usuarios WHERE id_grupo = ?";
 
