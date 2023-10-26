@@ -1,12 +1,16 @@
 package Windows;
 
+import Session.Session;
+import models.Group;
+import models.User;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewGroupsWindow extends JFrame {
     private JList<String> groupList;
@@ -14,42 +18,33 @@ public class ViewGroupsWindow extends JFrame {
     private JButton viewGroupButton;
     private JButton closeButton;
 
-    public ViewGroupsWindow() {
+    public ViewGroupsWindow(User user) {
         super("Ver Grupos Creados");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
         groupListModel = new DefaultListModel<>();
         groupList = new JList<>(groupListModel);
         JScrollPane listScrollPane = new JScrollPane(groupList);
 
+        // Llama al método para obtener la lista de grupos del usuario
+        List<Group> userGroups = listGroupUser(user);
+        if (userGroups != null) {
+            for (Group group : userGroups) {
+                groupListModel.addElement(group.getNameGroup()); // Agregar los grupos del usuario a la lista
+            }
+        }
+
         viewGroupButton = new JButton("Ver Grupo Seleccionado");
         closeButton = new JButton("Cerrar");
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(viewGroupButton);
+        buttonPanel.add(closeButton);
 
-        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-        hGroup.addComponent(listScrollPane);
-        hGroup.addGroup(layout.createParallelGroup(Alignment.CENTER)
-                .addComponent(viewGroupButton)
-                .addComponent(closeButton)
-        );
-        layout.setHorizontalGroup(hGroup);
-
-        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-        vGroup.addComponent(listScrollPane);
-        vGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
-        vGroup.addComponent(viewGroupButton); // Añadir botón "Ver Grupo Seleccionado"
-        vGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
-        vGroup.addComponent(closeButton); // Añadir botón "Cerrar"
-        layout.setVerticalGroup(vGroup);
-
-        // Agregar algunos grupos de ejemplo
-        groupListModel.addElement("Grupo 1");
-        groupListModel.addElement("Grupo 2");
-        groupListModel.addElement("Grupo 3");
+        add(listScrollPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // Manejar el evento de botón para ver el grupo seleccionado
         viewGroupButton.addActionListener(new ActionListener() {
@@ -67,18 +62,37 @@ public class ViewGroupsWindow extends JFrame {
         // Manejar el evento de botón para cerrar la ventana
         closeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                dispose();  // Cierra la ventana actual (ChatWindow)
+                dispose();  // Cierra la ventana actual (ViewGroupsWindow)
                 MainWindow.mainWindow.setVisible(true); // Muestra la ventana MainWindow
             }
         });
 
         pack();
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla
+        setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ViewGroupsWindow viewGroupsWindow = new ViewGroupsWindow();
-            viewGroupsWindow.setVisible(true);
-        });
+    private List<Group> listGroupUser(User user) {
+        // Este método se mantiene igual
+        var socket = Session.getSocket();
+        try {
+            var out = Session.getOut(socket);
+            var in = Session.getIn(socket);
+            out.writeUTF("getGroupByUser");
+            out.flush();
+            out.writeObject(user);
+            out.flush();
+
+            String response = in.readUTF();
+            if (response.equals("1")) {
+                JOptionPane.showMessageDialog(this, "Grupos Cargados");
+                return (ArrayList<Group>) in.readObject();
+            } else {
+                JOptionPane.showMessageDialog(this, "Grupos no cargados");
+                return null;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

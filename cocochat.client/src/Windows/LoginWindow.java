@@ -97,7 +97,6 @@ public class LoginWindow extends JFrame {
             throw new RuntimeException(e);
         }
 
-        dispose();
     }
 
     private void login() {

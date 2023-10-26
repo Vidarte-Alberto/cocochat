@@ -83,6 +83,44 @@ public class GroupDao {
         return null;
     }
 
+
+    public Group getGroupByName(String name) {
+        String query = "SELECT * FROM Grupo WHERE nombre = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, name);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapResultSetToGroup(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+    public List<Group> getGroupsByUser(int idUser) {
+        List<Group> groups = new ArrayList<>();
+        String query = "SELECT cocochat.Grupo.* FROM Grupo INNER JOIN cocochat.Grupo_usuarios Gu on Grupo.id_grupo = Gu.id_grupo WHERE id_usuario = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, idUser);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    groups.add(mapResultSetToGroup(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return groups;
+    }
+
     public List<Group> getGroupsByChat(int idChat) {
         List<Group> groups = new ArrayList<>();
         String query = "SELECT * FROM Grupo WHERE id_chat = ?";

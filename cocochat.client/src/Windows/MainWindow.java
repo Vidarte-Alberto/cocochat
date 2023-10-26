@@ -49,7 +49,7 @@ public class MainWindow extends JFrame {
         createGroupButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Implementa la lógica para abrir la ventana de creación de grupo
-                new CreateGroupWindow();
+                new CreateGroupWindow(user);
             }
         });
 
@@ -63,6 +63,7 @@ public class MainWindow extends JFrame {
         viewGroupButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Implementa la lógica para abrir la ventana de visualización de grupos
+                new ViewGroupsWindow(user);
             }
         });
 

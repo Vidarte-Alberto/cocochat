@@ -1,6 +1,7 @@
 package server;
 
 import dao.GroupDao;
+import dao.GroupUserDao;
 import dao.UserDao;
 import models.*;
 
@@ -18,9 +19,12 @@ public class ServerThread extends Thread{
     private String nombre;
     private User user = new User();
     private Group group = new Group();
+    private GroupUser groupUser = new GroupUser();
     UserDao userDao = new UserDao();
     GroupDao groupDao = new GroupDao();
+    GroupUserDao groupUserDao = new GroupUserDao();
     List<User> userList = new ArrayList<User>();
+    List<Group> groupUsersList = new ArrayList<Group>();
     Socket sc;
 
     public ServerThread(ObjectInputStream in, ObjectOutputStream out, Socket sc){
@@ -114,9 +118,29 @@ public class ServerThread extends Thread{
                         }
                         break;
                     case "createGroup":
-                        if (groupDao.createGroup((Group) in.readObject()))
+                        group = (Group) in.readObject();
+                        groupDao.createGroup(group);
+                        group = groupDao.getGroupByName(group.getNameGroup());
+                        user = (User)in.readObject();
+                        groupUser.setIdGroup(group.getIdGroup());
+                        groupUser.setIdUser(user.getIdUser());
+                        if (groupUserDao.createGroupUser(groupUser))
+                        {
+
+                            out.writeUTF("1");
+                        }else {
+                            out.writeUTF("0");
+                        }
+                        break;
+                    case "getGroupByUser":
+                        user = (User) in.readObject();
+                        groupUsersList = groupDao.getGroupsByUser(user.getIdUser());
+                        System.out.println(groupUsersList.toString());
+                        if (groupUsersList != null)
                         {
                             out.writeUTF("1");
+                            out.flush();
+                            out.writeObject(groupUsersList);
                         }else {
                             out.writeUTF("0");
                         }

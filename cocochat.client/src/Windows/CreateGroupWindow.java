@@ -11,7 +11,7 @@ import java.io.IOException;
 import javax.swing.border.EmptyBorder;
 
 public class CreateGroupWindow extends JFrame {
-    public CreateGroupWindow() {
+    public CreateGroupWindow(User user) {
         super("Crear Grupo");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(400, 300));
@@ -41,7 +41,7 @@ public class CreateGroupWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String groupName = groupNameField.getText();
                 String description = descriptionArea.getText();
-                createGroup(groupName,description);
+                createGroup(groupName,description, user);
                 dispose(); // Cierra la ventana
             }
         });
@@ -52,7 +52,7 @@ public class CreateGroupWindow extends JFrame {
         setVisible(true);
     }
 
-    private void createGroup(String name, String description) {
+    private void createGroup(String name, String description, User user) {
 
         if (name.isEmpty() || description.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre de usuario y la contraseña no pueden estar vacíos");
@@ -68,6 +68,8 @@ public class CreateGroupWindow extends JFrame {
             out.writeUTF("createGroup");
             out.flush();
             out.writeObject(group);
+            out.flush();
+            out.writeObject(user);
 
             String response = in.readUTF();
             if (response.equals("1")) {
