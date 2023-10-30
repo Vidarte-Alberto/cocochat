@@ -78,6 +78,7 @@ public class MainWindow extends JFrame {
         getContentPane().add(mainPanel);
         pack();
         setVisible(true);
+        this.mainWindow = this;
     }
 
     private JButton createMaterialButton(String text, Color color) {
