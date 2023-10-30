@@ -159,8 +159,6 @@ public class UserDao {
         }
     }
 
-
-
     public boolean deleteUser(int id) {
         String query = "DELETE FROM Usuarios WHERE id_usuario = ?";
 
@@ -172,6 +170,18 @@ public class UserDao {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
+        }
+    }
+
+    public static void disconnectAllUsers() {
+        String query = "UPDATE Usuarios SET conectado = 0";
+
+        var connection = DatabaseConnection.getConnection();
+        // execute update
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 

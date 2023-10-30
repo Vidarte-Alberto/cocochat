@@ -1,3 +1,4 @@
+import dao.UserDao;
 import server.ServerThread;
 
 import java.io.*;
@@ -11,6 +12,9 @@ public class Main {
         try {
             ServerSocket server = new ServerSocket(5050);
             Socket sc;
+
+            // Ningún usuario está conectado al inicializar el servidor
+            UserDao.disconnectAllUsers();
 
             System.out.println("Servidor iniciado");
             while (true) {
