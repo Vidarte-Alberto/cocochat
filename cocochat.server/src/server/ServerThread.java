@@ -157,10 +157,12 @@ public class ServerThread extends Thread{
                 out.flush();
             }
 
+        } catch (EOFException e) {
+            closeConnection();
+            return;
         } catch (IOException | ClassNotFoundException e) {
             Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, e);
         }
-
     }
 
     private void closeConnection() {
